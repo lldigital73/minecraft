@@ -5,7 +5,7 @@ export const SERVER_ADDRESS =
 
 export const HERO_IMAGE_URL =
   import.meta.env.VITE_HERO_IMAGE_URL ??
-  "https://images.unsplash.com/photo-1619364852960-0c11a8142ed9?auto=format&fit=crop&w=2000&q=80";
+  "/mc.jpg"; // local wallpaper in public/
 
 export const HERO_VIDEO_URL = (import.meta.env.VITE_HERO_VIDEO_URL ?? "").trim();
 
