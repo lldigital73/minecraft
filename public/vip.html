@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vanixidia VIP</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0b0f0b;
+      color: #f8fafc;
+      background-image:
+        url('https://www.transparenttextures.com/patterns/dark-matter.png'),
+        radial-gradient(circle at 20% 20%, rgba(16,185,129,0.15), transparent 40%),
+        radial-gradient(circle at 80% 0%, rgba(74,222,128,0.12), transparent 40%),
+        linear-gradient(to bottom, #0b0f0b, #030504);
+      min-height: 100vh;
+    }
+    .font-pixel { font-family: 'Press Start 2P', cursive; }
+    .font-mc { font-family: 'VT323', monospace; }
+    .mc-panel {
+      background: rgba(17, 24, 17, 0.9);
+      border: 4px solid #000;
+      box-shadow: inset 4px 4px 0px rgba(255,255,255,0.05), inset -4px -4px 0px rgba(0,0,0,0.8);
+      position: relative;
+    }
+    .mc-button {
+      image-rendering: pixelated;
+      position: relative;
+      background: #5ea818;
+      border: 4px solid #000;
+      box-shadow: inset 4px 4px 0px #82d134, inset -4px -4px 0px #3a6b0f;
+      transition: all 0.1s;
+      color: white;
+      text-shadow: 2px 2px 0px #3a6b0f;
+    }
+    .mc-button:hover { background: #6dbf1c; transform: translateY(-2px); }
+    .mc-button:active { box-shadow: inset -4px -4px 0px #82d134, inset 4px 4px 0px #3a6b0f; transform: translateY(2px); }
+  </style>
+</head>
+<body class="py-12 px-4">
+  <header class="max-w-4xl mx-auto mb-10 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 bg-emerald-600 border-4 border-black shadow-[inset_2px_2px_0_#82d134] flex items-center justify-center">
+        <span class="text-2xl font-mc font-bold text-white">V</span>
+      </div>
+      <div>
+        <p class="text-sm font-pixel text-emerald-400 uppercase tracking-[0.3em]">Vanixidia</p>
+        <h1 class="text-4xl font-mc font-bold text-white tracking-tight">VIP brána</h1>
+      </div>
+    </div>
+    <a href="/" class="text-emerald-400 font-mc text-xl hover:text-white">← späť na domov</a>
+  </header>
+
+  <main class="max-w-4xl mx-auto space-y-8">
+    <div class="mc-panel p-8">
+      <h2 class="text-3xl font-mc font-bold text-white mb-4">Ako to funguje?</h2>
+      <p class="text-lg text-slate-300 font-mc leading-snug">
+        Zadaj svoj Minecraft nick, vyber si VIP úroveň a zaplať. Po potvrdení platby pošleme príkaz na server a VIP ti nabehne automaticky.
+      </p>
+      <p class="text-sm text-amber-400 font-mc mt-3">
+        (Potrebujeme napojiť platobnú bránu a serverový webhook – ak ešte nie je nasadený, uvidíš len demo potvrdenie.)
+      </p>
+    </div>
+
+    <div class="mc-panel p-8 space-y-6">
+      <div>
+        <label class="block text-sm font-pixel text-emerald-400 uppercase mb-2">Minecraft nick</label>
+        <input id="nick" type="text" class="w-full bg-black/40 border-2 border-emerald-700 text-white px-4 py-3 font-mc text-xl focus:outline-none focus:border-emerald-400" placeholder="TvojNick" />
+      </div>
+      <div>
+        <label class="block text-sm font-pixel text-emerald-400 uppercase mb-2">VIP balík</label>
+        <select id="tier" class="w-full bg-black/40 border-2 border-emerald-700 text-white px-4 py-3 font-mc text-xl focus:outline-none focus:border-emerald-400">
+          <option value="vip">VIP - 5€ / mesiac</option>
+          <option value="mvp">MVP - 9€ / mesiac</option>
+          <option value="legend">LEGEND - 14€ / mesiac</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-pixel text-emerald-400 uppercase mb-2">Email (potvrdenie)</label>
+        <input id="email" type="email" class="w-full bg-black/40 border-2 border-emerald-700 text-white px-4 py-3 font-mc text-xl focus:outline-none focus:border-emerald-400" placeholder="ty@priklad.sk" />
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="pay-btn" class="mc-button px-6 py-3 font-mc text-2xl">ZAPLATIŤ</button>
+        <span id="status" class="text-slate-400 font-mc text-lg"></span>
+      </div>
+    </div>
+
+    <div class="mc-panel p-8">
+      <h3 class="text-2xl font-mc font-bold text-white mb-3">Poznámky pre admina</h3>
+      <ul class="list-disc list-inside text-slate-300 font-mc text-lg space-y-1">
+        <li>Napoj platobnú bránu (GoPay/Stripe) a po úspešnej platbe zavolaj serverový webhook.</li>
+        <li>Webhook by mal spustiť príkaz v Pterodactyl/Spigot: <code class="bg-black/40 px-2 py-1 rounded">lp user &lt;nick&gt; parent add vip</code>.</li>
+        <li>Endpoint na pridanie VIP môže byť napr. <code>/api/grant-vip</code> v serverless funkcionalite (Vercel Functions).</li>
+      </ul>
+    </div>
+  </main>
+
+  <script>
+    const statusEl = document.getElementById('status');
+    document.getElementById('pay-btn').addEventListener('click', () => {
+      const nick = (document.getElementById('nick') as HTMLInputElement).value.trim();
+      const tier = (document.getElementById('tier') as HTMLSelectElement).value;
+      const email = (document.getElementById('email') as HTMLInputElement).value.trim();
+
+      if (!nick) {
+        statusEl.textContent = 'Zadaj nick, aby sme vedeli komu prideliť VIP.';
+        statusEl.className = 'text-amber-400 font-mc text-lg';
+        return;
+      }
+
+      // Demo-only: tu napoj platbu + webhook
+      statusEl.textContent = `Demo: po úhrade priradíme ${tier.toUpperCase()} hráčovi ${nick}.`;
+      statusEl.className = 'text-emerald-400 font-mc text-lg';
+    });
+  </script>
+</body>
+</html>
+

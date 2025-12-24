@@ -33,9 +33,9 @@ const Navbar: React.FC = () => {
             ))}
           </div>
 
-          <button className="mc-button mc-button-green px-6 py-2 font-mc text-xl">
-            OBCHOD
-          </button>
+          <a href="/vip" className="mc-button mc-button-green px-6 py-2 font-mc text-xl">
+            VIP
+          </a>
         </div>
       </div>
     </nav>
